@@ -25,15 +25,14 @@ namespace MoreScreams.Patches
             if(configs == null) configs = new Dictionary<PlayerControllerB, AudioConfig>();
             if (!updateStarted)
             {
-                StartOfRound.Instance.StartCoroutine(FixedUpdateNumerator());
+                StartOfRound.Instance.StartCoroutine(UpdateNumerator());
                 updateStarted = true;
             }
+
             if (GameNetworkManager.Instance == null || GameNetworkManager.Instance.localPlayerController == null)
             {
                 return;
             }
-
-            RemoveAlivePlayers();
 
             for (int i = 0; i < StartOfRound.Instance.allPlayerScripts.Length; i++)
             {
@@ -80,8 +79,6 @@ namespace MoreScreams.Patches
                 return;
             }
 
-            RemoveAlivePlayers();
-
             foreach (var playerControllerB in configs.Keys)
             {
                 AudioConfig config = configs[playerControllerB];
@@ -108,61 +105,41 @@ namespace MoreScreams.Patches
             }
         }
 
-        private static IEnumerator FixedUpdateNumerator()
+        private static IEnumerator UpdateNumerator()
         {
             yield return 0;
+
             HashSet<PlayerControllerB> playerControllersToRemove = new HashSet<PlayerControllerB>();
 
             while (true)
             {
-                if(configs == null)
-                {
-                    yield return null;
-                    continue;
-                }
-
-                playerControllersToRemove.Clear();
-                foreach (var conf in configs)
-                {
-                    if(conf.Value.ShutUpAt < Time.time)
-                    {
-                        playerControllersToRemove.Add(conf.Key);
-                    }
-                    conf.Value.AudioSourceT.position = conf.Value.DeadBodyT.position;
-                }
-
-                foreach (var key in playerControllersToRemove)
-                {
-                    configs.Remove(key);
-                }
-
-                yield return new WaitForFixedUpdate();
+                CleanPlayers();
+                yield return new WaitForEndOfFrame();
             }
         }
-        private static void RemoveAlivePlayers()
+        private static void CleanPlayers()
         {
-            List<PlayerControllerB> toRemove = new List<PlayerControllerB>();
+
+            if (configs == null)
+                return;
+
+            bool removed = false;
+
             foreach (KeyValuePair<PlayerControllerB, AudioConfig> pair in configs)
             {
-                if (!pair.Key.isPlayerDead)
-                {
-                    toRemove.Add(pair.Key);
-                }
+                pair.Value.AudioSourceT.position = pair.Value.DeadBodyT.position;
             }
 
-            foreach (PlayerControllerB player in checkedPlayers)
+            foreach(var player in configs.Where(x => !x.Key.isPlayerDead || x.Value.ShutUpAt < Time.time).Select(x => x.Key).Union(checkedPlayers.Where(x => !x.isPlayerDead)))
             {
-                if (!player.isPlayerDead)
-                {
-                    toRemove.Add(player);
-                }
+                removed = true;
+                configs.Remove(player);
+                if (!player.isPlayerDead) checkedPlayers.Remove(player);
             }
 
-            foreach (var key in toRemove)
-            {
-                configs.Remove(key);
-                checkedPlayers.Remove(key);
-            }
+
+            if(removed) StartOfRound.Instance.UpdatePlayerVoiceEffects();
+
         }
 
         private static float GetPitch(PlayerControllerB playerControllerB)

@@ -31,14 +31,5 @@ namespace MoreScreams.Patches
 
             return true;
         }
-
-
-        static void UpdateAudioSourcePoses()
-        {
-            foreach (AudioConfig conf in UpdatePlayerVoiceEffectsPatch.Configs.Values)
-            {
-                conf.AudioSourceT.position = conf.DeadBodyT.position;
-            }
-        }
     }
 }
