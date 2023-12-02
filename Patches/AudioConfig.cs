@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GameNetcodeStuff;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,7 @@ namespace MoreScreams.Patches
 {
     public class AudioConfig
     {
+        private PlayerControllerB playerControllerB;
         private float shutUpAt = 0f;
 
         private bool lowPassFilter = false;
@@ -28,8 +30,11 @@ namespace MoreScreams.Patches
         private Transform deadBodyT;
         private Transform audioSourceT;
 
-        public AudioConfig(float shutUpAt, bool lowPassFilter, bool highPassFilter, float panStereo, float playerVoicePitchTargets, float playerPitch, float spatialBlend, bool set2D, float volume, Transform deadBodyT, Transform audioSourceT)
+        public bool ShutUp => shutUpAt < Time.time || !playerControllerB.isPlayerDead;
+
+        public AudioConfig(PlayerControllerB playerControllerB, float shutUpAt, bool lowPassFilter, bool highPassFilter, float panStereo, float playerVoicePitchTargets, float playerPitch, float spatialBlend, bool set2D, float volume, Transform deadBodyT, Transform audioSourceT)
         {
+            this.playerControllerB = playerControllerB;
             this.shutUpAt = shutUpAt;
             this.lowPassFilter = lowPassFilter;
             this.highPassFilter = highPassFilter;
