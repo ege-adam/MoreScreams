@@ -61,9 +61,7 @@ namespace MoreScreams.Patches
                                         GetPitch(playerControllerB),
                                         currentVoiceChatAudioSource.spatialBlend,
                                         playerControllerB.currentVoiceChatIngameSettings.set2D,
-                                        playerControllerB.voicePlayerState.Volume,
-                                        playerControllerB.deadBody == null ? null : playerControllerB.deadBody.transform,
-                                        currentVoiceChatAudioSource.transform
+                                        playerControllerB.voicePlayerState.Volume
                                     )
                             );
                         }

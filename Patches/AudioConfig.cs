@@ -27,12 +27,9 @@ namespace MoreScreams.Patches
 
         private float volume = 0f;
 
-        private Transform deadBodyT;
-        private Transform audioSourceT;
-
         public bool IsAliveOrShuttedUp => shutUpAt < Time.time || !playerControllerB.isPlayerDead;
 
-        public AudioConfig(PlayerControllerB playerControllerB, float shutUpAt, bool lowPassFilter, bool highPassFilter, float panStereo, float playerVoicePitchTargets, float playerPitch, float spatialBlend, bool set2D, float volume, Transform deadBodyT, Transform audioSourceT)
+        public AudioConfig(PlayerControllerB playerControllerB, float shutUpAt, bool lowPassFilter, bool highPassFilter, float panStereo, float playerVoicePitchTargets, float playerPitch, float spatialBlend, bool set2D, float volume)
         {
             this.playerControllerB = playerControllerB;
             this.shutUpAt = shutUpAt;
@@ -44,8 +41,6 @@ namespace MoreScreams.Patches
             this.spatialBlend = spatialBlend;
             this.set2D = set2D;
             this.volume = volume;
-            this.deadBodyT = deadBodyT;
-            this.audioSourceT = audioSourceT;
         }
 
         public float ShutUpAt { get => shutUpAt; }
@@ -57,7 +52,7 @@ namespace MoreScreams.Patches
         public float SpatialBlend { get => spatialBlend; }
         public bool Set2D { get => set2D; }
         public float Volume { get => volume; }
-        public Transform DeadBodyT { get => deadBodyT; }
+        public Transform DeadBodyT { get => playerControllerB.deadBody.transform; }
         public Transform AudioSourceT { get => playerControllerB.currentVoiceChatAudioSource.transform; }
     }
 }
