@@ -23,6 +23,8 @@ namespace MoreScreams.Patches
         {
             foreach(AudioConfig conf in UpdatePlayerVoiceEffectsPatch.Configs.Values)
             {
+                if (conf.IsAliveOrShuttedUp) continue;
+
                 if((__instance as VoicePlayback).transform.Equals(conf.AudioSourceT))
                 {
                     return false;

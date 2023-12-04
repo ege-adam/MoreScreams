@@ -93,9 +93,9 @@ namespace MoreScreams.Patches
                     if (playerControllerB.currentVoiceChatAudioSource == null) continue;
                     AudioSource currentVoiceChatAudioSource = playerControllerB.currentVoiceChatAudioSource;
 
-                    if (!config.ShutUp)
+                    if (!config.IsAliveOrShuttedUp)
                     {
-                        if(playerControllerB.deadBody != null) currentVoiceChatAudioSource.transform.position = playerControllerB.deadBody.transform.position;
+                        if (playerControllerB.deadBody != null) currentVoiceChatAudioSource.transform.position = playerControllerB.deadBody.transform.position;
 
                         currentVoiceChatAudioSource.panStereo = config.PanStereo;
                         currentVoiceChatAudioSource.spatialBlend = config.SpatialBlend;
@@ -105,7 +105,6 @@ namespace MoreScreams.Patches
 
                         if(lowPassFilter != null) lowPassFilter.enabled = config.LowPassFilter;
                         if(highPassFilter != null) highPassFilter.enabled = config.HighPassFilter;
-
 
 
                         if (SoundManager.Instance != null)
@@ -118,10 +117,10 @@ namespace MoreScreams.Patches
                         playerControllerB.voicePlayerState.Volume = config.Volume;
                         playerControllerB.currentVoiceChatAudioSource.volume = config.Volume;
                     }
-                    else if(!playerControllerB.isPlayerDead)
-                    {
-                        configs.Remove(playerControllerB);
-                    }
+                }
+                else if (!playerControllerB.isPlayerDead)
+                {
+                    configs.Remove(playerControllerB);
                 }
             }
         }
@@ -147,6 +146,8 @@ namespace MoreScreams.Patches
 
             foreach(var player in configs.ToArray())
             {
+
+                if (player.Key == null) continue;
 
                 if (!player.Key.isPlayerDead)
                 {

@@ -30,7 +30,7 @@ namespace MoreScreams.Patches
         private Transform deadBodyT;
         private Transform audioSourceT;
 
-        public bool ShutUp => shutUpAt < Time.time || !playerControllerB.isPlayerDead;
+        public bool IsAliveOrShuttedUp => shutUpAt < Time.time || !playerControllerB.isPlayerDead;
 
         public AudioConfig(PlayerControllerB playerControllerB, float shutUpAt, bool lowPassFilter, bool highPassFilter, float panStereo, float playerVoicePitchTargets, float playerPitch, float spatialBlend, bool set2D, float volume, Transform deadBodyT, Transform audioSourceT)
         {
