@@ -58,6 +58,6 @@ namespace MoreScreams.Patches
         public bool Set2D { get => set2D; }
         public float Volume { get => volume; }
         public Transform DeadBodyT { get => deadBodyT; }
-        public Transform AudioSourceT { get => audioSourceT; }
+        public Transform AudioSourceT { get => playerControllerB.currentVoiceChatAudioSource.transform; }
     }
 }
