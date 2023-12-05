@@ -19,6 +19,7 @@ namespace MoreScreams.Patches
 
         public static Dictionary<PlayerControllerB, AudioConfig> Configs { get => configs; }
 
+        [HarmonyBefore(new string[] { "BiggerLobby" })]
         private static void Prefix()
         {
             if(configs == null) configs = new Dictionary<PlayerControllerB, AudioConfig>();
@@ -43,7 +44,7 @@ namespace MoreScreams.Patches
 
                 if ((playerControllerB.isPlayerControlled || playerControllerB.isPlayerDead) && (playerControllerB != GameNetworkManager.Instance.localPlayerController))
                 {
-                    AudioSource currentVoiceChatAudioSource = StartOfRound.Instance.allPlayerScripts[i].currentVoiceChatAudioSource;
+                    AudioSource currentVoiceChatAudioSource = playerControllerB.currentVoiceChatAudioSource;
                     if (currentVoiceChatAudioSource == null) continue;
 
                     if (playerControllerB.isPlayerDead)

@@ -12,7 +12,7 @@ namespace MoreScreams
     {
         private const string modGUID = "egeadam.MoreScreams";
         private const string modName = "MoreScreams";
-        private const string modVersion = "1.0.1";
+        private const string modVersion = "1.0.2";
 
         private readonly Harmony harmony = new Harmony(modGUID);
 
